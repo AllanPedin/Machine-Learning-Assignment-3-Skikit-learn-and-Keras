@@ -70,10 +70,12 @@ def get_p_value(distribution_a, distribution_b):
 # Main Method to compare performance of different classifiers and hyper-parameters
 if __name__ == '__main__':
     #load the iris data
-    file_path = 'iris.data'
+    file_path = 'myData.data'
     data = np.loadtxt(file_path, delimiter=',')
-    X = data[:,:-1]
-    Y = data[:,-1]
+    data_cols = np.array([False, False, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True])
+    #^thats gross but it gets the job done
+    X = data[:,data_cols]
+    Y = data[:,1]
 
     #get a test set
     num_samples, num_features = X.shape
@@ -89,14 +91,24 @@ if __name__ == '__main__':
     x_buckets, y_buckets = get_buckets(X_train, Y_train, k)
 
     #create a decision tree model
+    # from sklearn import tree
+    # decision_tree_md5 = tree.DecisionTreeClassifier(max_depth=1)
+    # decision_tree_md100 = tree.DecisionTreeClassifier(max_depth=100)
+    #K nearest neighbors
+    from sklearn import neighbors
+    from sklearn import linear_model
+    from sklearn import neural_network
+    from sklearn import svm
     from sklearn import tree
-    decision_tree_md5 = tree.DecisionTreeClassifier(max_depth=1)
-    decision_tree_md100 = tree.DecisionTreeClassifier(max_depth=100)
+    from sklearn import ensemble
+
+    modela = linear_model.RidgeClassifier(alpha=1)
+    modelb = ensemble.AdaBoostClassifier(n_estimators=1000)
 
     #get cv results for a model
     print ("Cross-validation Performance")
-    f1_scores_a = cross_validate(x_buckets, y_buckets, k, decision_tree_md5)
-    f1_scores_b = cross_validate(x_buckets, y_buckets, k, decision_tree_md100)
+    f1_scores_a = cross_validate(x_buckets, y_buckets, k, modela)
+    f1_scores_b = cross_validate(x_buckets, y_buckets, k, modelb)
     print("mean f1 a: ", np.mean(f1_scores_a))
     print("mean f1 b: ", np.mean(f1_scores_b))
     p = get_p_value(f1_scores_a, f1_scores_b)
@@ -106,10 +118,10 @@ if __name__ == '__main__':
 
     #get test set predictions to compare two models on the test set
     print("\nTest Set Performance")
-    predictions_a = get_test_set_predictions(X_train, Y_train, X_test, decision_tree_md5)
-    predictions_b = get_test_set_predictions(X_train, Y_train, X_test, decision_tree_md100)
+    predictions_a = get_test_set_predictions(X_train, Y_train, X_test, modela)
+    predictions_b = get_test_set_predictions(X_train, Y_train, X_test, modelb)
     f1_score_a = sklearn.metrics.f1_score(Y_test, predictions_a, average='macro')
-    f1_score_b = sklearn.metrics.f1_score(Y_test, predictions_a, average='macro')
+    f1_score_b = sklearn.metrics.f1_score(Y_test, predictions_b, average='macro')
     print("test set f1 score a: ", np.mean(f1_score_a))
     print("test set f1 score b: ", np.mean(f1_score_b))
     p = get_p_value(predictions_a, predictions_b)
@@ -128,7 +140,7 @@ if __name__ == '__main__':
     knn = neighbors.KNeighborsClassifier(n_neighbors=5)
     #Linear classifier (ridge regression)
     from sklearn import linear_model
-    ridge_regression = linear_model.Ridge(alpha=0.5)
+    ridge_regression = linear_model.RidgeClassifier(alpha=0.5)
     #neural network
     from sklearn import neural_network
     ann = neural_network.MLPClassifier()
