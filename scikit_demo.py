@@ -97,7 +97,8 @@ if __name__ == '__main__':
     print ("Cross-validation Performance")
     f1_scores_a = cross_validate(x_buckets, y_buckets, k, decision_tree_md5)
     f1_scores_b = cross_validate(x_buckets, y_buckets, k, decision_tree_md100)
-    print("mean f1 a vs. b = ", np.mean(f1_scores_a), "vs. ", np.mean(f1_scores_b))
+    print("mean f1 a: ", np.mean(f1_scores_a))
+    print("mean f1 b: ", np.mean(f1_scores_b))
     p = get_p_value(f1_scores_a, f1_scores_b)
     print("p-value comparing cross-validation performance of a vs. b = ",p)
     #compare p to alpha and make a conlcusion
@@ -109,7 +110,8 @@ if __name__ == '__main__':
     predictions_b = get_test_set_predictions(X_train, Y_train, X_test, decision_tree_md100)
     f1_score_a = sklearn.metrics.f1_score(Y_test, predictions_a, average='macro')
     f1_score_b = sklearn.metrics.f1_score(Y_test, predictions_a, average='macro')
-    print ("test set f1 score for a vs. b = ", f1_score_a, " vs ", f1_score_b )
+    print("test set f1 score a: ", np.mean(f1_score_a))
+    print("test set f1 score b: ", np.mean(f1_score_b))
     p = get_p_value(predictions_a, predictions_b)
     print ("p-value comparing test set performance of a vs. b = ", p)
     #compare your p-value to alpha to make a conclusion
