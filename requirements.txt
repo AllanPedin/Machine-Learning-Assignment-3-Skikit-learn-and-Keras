@@ -2,3 +2,4 @@ pandas
 sklearn
 keras
 numpy
+tensorflow

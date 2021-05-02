@@ -102,8 +102,23 @@ if __name__ == '__main__':
     from sklearn import tree
     from sklearn import ensemble
 
-    modela = linear_model.RidgeClassifier(alpha=1)
-    modelb = ensemble.AdaBoostClassifier(n_estimators=1000)
+    # modela = ensemble.AdaBoostClassifier()
+    # modelb = ensemble.AdaBoostClassifier(learning_rate=1, n_estimators=1000)
+
+    # modela = tree.DecisionTreeClassifier()
+    # modelb = tree.DecisionTreeClassifier(criterion="gini", min_samples_split = 5)
+
+    # modela = svm.SVC()
+    # modelb = svm.SVC(kernel='poly', degree=10)
+
+    # modela = neural_network.MLPClassifier()
+    # modelb = neural_network.MLPClassifier(max_iter=10000)
+
+    # modela = linear_model.RidgeClassifier()
+    # modelb = linear_model.RidgeClassifier( alpha=10, copy_X=True, class_weight="balanced")
+
+    modela = neighbors.KNeighborsClassifier()
+    modelb = neighbors.KNeighborsClassifier(n_neighbors=3, weights= "distance")
 
     #get cv results for a model
     print ("Cross-validation Performance")
